@@ -40,6 +40,14 @@ buttonHistoric.addEventListener("click", () => show(pageHistoric));
 show(pageHome);
 
 
+const seePassword = document.getElementById("seePassword");
+const passwordInput = document.getElementById("passwordInput");
 
-
+seePassword.addEventListener("click", () => {
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+    } else {
+        passwordInput.type = "password";
+    }
+});
 
