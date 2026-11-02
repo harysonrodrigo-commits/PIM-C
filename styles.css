@@ -5,6 +5,7 @@ body {
     margin: 0;
     background-color: var(--background);
     transition: background-color 0.2s ease-in-out;
+    
 }
 
 /* Cores Tema */
@@ -22,7 +23,7 @@ body {
 
 #cabecalho {
     display: flex;
-    position: fixed;
+    position: sticky;
     top: 0;
     background-color: transparent;
     border-bottom: 1px solid var(--hover-border);
@@ -58,14 +59,11 @@ body {
 
 #page-config, #page-home, #page-historic {
     display: flex;
-    position: absolute;
-    top: 0;
-    right: 0;
+    position: relative;
+    
     justify-content: center;
-    height: 85vh;
-    width: -webkit-fill-available;
-    padding-top: 120px;
-    padding-left: 30px;
+    min-height: 91.5vh;
+    width: 100%;
     overflow: hidden;
 }
 
@@ -151,7 +149,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 75%;
+    width: 65%;
 }
 
 .title {
@@ -193,7 +191,7 @@ body {
 
 #buttonForm {
     margin-top: 25px;
-    width: 50%;
+    width: 45%;
     height: 55px;
     border: none;
     border-radius: 15px;
@@ -207,7 +205,7 @@ body {
 }
 
 #buttonForm:hover {
-    width: 51%;
+    width: 46%;
     height: 60px;
     font-size: 22px;
     background: var(--hover-border);
@@ -228,6 +226,7 @@ body {
 #buttonCall {
     width: 60%;
     height: 140px;
+    margin-top: 40px;
     font-size: 50px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     border-radius: 15px;
@@ -243,4 +242,181 @@ body {
     height: 150px;
     background-color: rgb(138, 209, 32);
     transition: 0.3s ease-in-out;
+}
+
+
+/* CALL */
+
+/*#boxCall {
+    display: flex;
+    position: sticky;
+    background-color: var(--color-base);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    width: 20vh;
+    top: 5px;
+    height: 90.5vh;
+    transition: 0.7s ease-in-out;
+    box-shadow: 0 0 10px rgb(0, 0, 0);
+    z-index: 2;
+} */
+
+/*#boxCall:hover {
+    width: 100vh;
+    transition: 0.7s ease-in-out;
+} */
+
+#contCall {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: first baseline;
+    align-items: center;
+    background: var(--background);
+    min-height: 90vh;
+    width: 100%;
+    transition: 0.7s ease-in-out;
+    gap: 70px;
+}
+
+#question {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    top: 40px;
+    height: 100px;
+    width: 45%;
+    font-size: 150%;
+    cursor: default;
+}
+
+#boxOption {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 45%;
+    gap: 40px;
+}
+
+#callboxOption {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 45%;
+    gap: 130px;
+}
+
+.callOption {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    background: var(--background);
+    height: 90px;
+    width: 99%;
+    gap: 20px;
+    border-radius: 15px;
+    transition: 0.4s ease-in-out;
+    font-size: 150%;
+    isolation: isolate;
+    box-shadow: inset 0 0 10px rgb(0, 0, 0);
+    cursor: pointer;
+    font-variant: small-caps;
+    transition: 0.3s ease-in-out;
+}
+
+.callOption::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    border-radius: 15px;
+    background: linear-gradient(310deg, var(--color-base) 70%, var(--hover-border));
+    transition: 0.3s ease-in-out;
+    z-index: -1;
+}
+.callOption:hover::before {
+    width: 100%;
+    border: 2px solid var(--hover-border);
+    box-shadow: inset 0 0 10px var(--hover-border);
+}
+
+.callOption:hover {
+    width: 100%;
+    font-size: 153%;
+    height: 100px;
+    transition: 0.4s ease-in-out;
+}
+
+#callOne  {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 20px;
+    gap: 20px;
+    width: 70%;
+    height: 150px;
+    transition: 0.3s ease-in-out;
+}
+
+
+#problem {
+    font-weight: 700;
+    border-radius: 5px;
+    border: black;
+    width: 70%;
+    height: 35%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgb(0, 0, 0);
+    transition: 0.3s ease-in-out;
+}
+
+#problem:hover {
+    box-shadow: 0 0 0 2px var(--hover-border);
+}
+
+#callTwo {
+    display: none;
+    justify-content: center;
+    position: relative;
+    border-radius: 15px;
+    box-shadow: inset 0 0 10px var(--hover-border), 0 0 10px black;
+    align-items: center;
+    flex-direction: column;
+    padding-left: 5%;
+    padding-right: 5%;
+    gap: 30px;
+    width: 70%;
+    min-height: 40vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background: linear-gradient(195deg,var(--color-base) 20%, var(--hover-border), var(--color-base));
+    font-weight: bold;
+    transition: 0.3s ease-in-out;
+}
+
+@keyframes open {
+    from {opacity: 0; transform: translateY(-20%);}
+    to {opacity: 1; transform: translateY(0%);}
+}
+
+
+.open {
+    animation: open 0.6s ease-in-out forwards;
+}
+
+#callTwo:hover {
+    box-shadow: inset 0 0 10px var(--hover-border);
 }
