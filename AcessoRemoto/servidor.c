@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <windows.h>
 #include <winsock2.h>
+#pragma comment(lib, "ws2_32.lib")
 
 int main() {
        SetConsoleOutputCP(CP_UTF8);// aceitar acentos
@@ -24,12 +25,11 @@ int main() {
         }
 
     
-    struct sockaddr_in endereco; 
+    struct sockaddr_in endereco;
     //Rascunho salvo na memória para BIND reservar endereço e porta
-
-    endereco.sin_family = AF_INET;
-    endereco.sin_addr.s_addr = INADDR_ANY;
-    endereco.sin_port = htons(5000);
+        endereco.sin_family = AF_INET;
+        endereco.sin_addr.s_addr = INADDR_ANY;
+        endereco.sin_port = htons(5000);
 
     int resultadoBind = bind (servidor, (struct sockaddr*)&endereco, sizeof (endereco));
     //Reserva porta e endereço ao socket
