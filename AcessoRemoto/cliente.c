@@ -36,7 +36,7 @@ int main() {
             WSACleanup();
             return 1;  // (Erro 10061 = não tem servidor escutando nessa porta.)
         }
-        printf ("Conexão realizada com sucesso! ");
+        printf ("Conexão realizada com sucesso! \n");
 
     char mensagem [] = "Olá servidor!";
     // Cria um vetor de char com o texto "Ola servidor" (mensagem).
@@ -51,7 +51,7 @@ int main() {
             WSACleanup();
             return 1;
         }
-    printf ("Mensagem enviada! ");
+    printf ("Mensagem enviada! \n");
     
     closesocket(cliente);
     WSACleanup();
