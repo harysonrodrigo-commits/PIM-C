@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <winsock2.h>
-#pragma comment(lib, "ws2_32.lib")
 
 int main() {
         SetConsoleOutputCP(CP_UTF8);
@@ -55,5 +54,5 @@ int main() {
     
     closesocket(cliente);
     WSACleanup();
-    return 1;
+    return 0;
 }
