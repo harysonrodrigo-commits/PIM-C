@@ -40,18 +40,23 @@ int main() {
     char mensagem [] = "Olá servidor!";
     // Cria um vetor de char com o texto "Ola servidor" (mensagem).
     // É o conteúdo que vai ser enviado.
-
-    int bytesEnviados = send(cliente, mensagem, strlen(mensagem), 0);
-    // Envia os bytes pela conexão; strlen informa quantos bytes mandar.
-
-        if (bytesEnviados == SOCKET_ERROR){
-            printf ("Bytes não enviados! Código: %d \n", WSAGetLastError());
-            closesocket(cliente);
-            WSACleanup();
-            return 1;
-        }
-    printf ("Mensagem enviada! \n");
+    for (int i = 1; i <= 5; i++){
+        char mensagem [64];
+        sprintf(mensagem, " Mensagem: %d", i);
     
+        int bytesEnviados = send(cliente, mensagem, strlen(mensagem), 0);
+        // Envia os bytes pela conexão; strlen informa quantos bytes mandar.
+
+            if (bytesEnviados == SOCKET_ERROR){
+                printf ("Bytes não enviados! Código: %d \n", WSAGetLastError());
+                closesocket(cliente);
+                WSACleanup();
+                return 1;
+                break;
+            }
+        printf ("Mensagem enviada! \n");
+        Sleep (2000);
+    }
     closesocket(cliente);
     WSACleanup();
     return 0;

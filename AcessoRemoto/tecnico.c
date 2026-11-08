@@ -38,13 +38,15 @@ int main() {
 
     char buffer [1024];
     // Cria um vetor de char de 1024 posições (buffer): onde a mensagem do servidor vai ficar guardada.
+    int bytes;
 
-    int bytes = recv(tecnico, buffer, sizeof(buffer) - 1, 0);
+    while ((bytes = recv(tecnico, buffer, sizeof(buffer) - 1, 0)) > 0){
+        buffer[bytes]='\0'; // '\0' marca o fim do texto, e '-1' em 'recv' garante espaço para ele
+        printf ("Mensagem do cliente: %s \n", buffer);
+    }
     // Ele espera o servidor repassar a mensagem do cliente.
-          if (bytes > 0){
-            buffer[bytes]='\0'; // '\0' marca o fim do texto, e '-1' em 'recv' garante espaço para ele
-            printf ("Mensagem do cliente: %s \n", buffer);
-        } else if (bytes == 0) {
+        
+        if (bytes == 0) {
             printf ("Servidor fechou! \n");
         } else {
             printf ("Deu erro! %d \n", WSAGetLastError());
