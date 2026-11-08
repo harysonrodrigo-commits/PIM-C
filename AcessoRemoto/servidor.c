@@ -40,7 +40,7 @@ int main() {
         }
 
     
-    int resultadoListen = listen(servidor, 1); 
+    int resultadoListen = listen(servidor, 5); 
     //Põe o Socket em modo de espera, pronto para ouvir e receber pedidos de conexão
     
         if (resultadoListen == SOCKET_ERROR){ //Mesmo tratamento de BIND
@@ -75,11 +75,36 @@ int main() {
         if (bytes > 0){
             buffer[bytes]='\0'; // '\0' marca o fim do texto, e '-1' em 'recv' garante espaço para ele
             printf ("Mensagem recebida! %s \n", buffer);
+            
+            printf ("Aguardando o técnico! \n");
+
+            SOCKET socketTecnico = accept(servidor, NULL, NULL);
+                if (socketTecnico == INVALID_SOCKET){
+                    printf ("Conexão deu erro! Código: %d \n", WSAGetLastError());
+                    closesocket(socketCliente);
+                    closesocket(servidor);
+                    WSACleanup(); //Se INVALID_SOCKET então, deu erro
+                    return 1;
+                }
+            printf("Técnico conectado! \n");
+
+            int mensagemCliente = send(socketTecnico, buffer, bytes, 0);//bytes é a quantidade real que o recv devolveu.
+                if (mensagemCliente == SOCKET_ERROR){
+                    printf ("Mensagem não repassada! Código: %d \n", WSAGetLastError());
+                    closesocket(socketTecnico);
+                    closesocket(socketCliente);
+                    closesocket(servidor);
+                    WSACleanup();
+                    return 1;
+                }
+            printf("Mensagem Repassada com sucesso! \n");
         } else if (bytes == 0) {
             printf ("Cliente desconectou! \n");
         } else {
             printf ("Deu erro! %d \n", WSAGetLastError());
         }
+
+
     closesocket(socketCliente); // Fecha o socket do cliente 
     closesocket(servidor); //fecha socket do servidor
     WSACleanup(); // Encerra a biblioteca e libera os recursos Winsock alocados

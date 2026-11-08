@@ -1,30 +1,56 @@
 #include <stdio.h>
-#include <windows.h>
 #include <winsock2.h>
 
-int main (){
-     SetConsoleOutputCP(CP_UTF8);// aceitar acentos
+int main() {
+        SetConsoleOutputCP(CP_UTF8);
+    WSADATA wsaData;
+   
+    int resultado = WSAStartup(MAKEWORD(2, 2), &wsaData);
 
-     WSADATA wsaData;
-
-     int resultado = WSAStartup(MAKEWORD (2, 2), &wsaData);
-
-        if (resultado !=0){ // Se diferente de zero, há um erro na inicialização do Winsock
-            printf ("Winsock não iniciado! \n");
+        if (resultado != 0) {
+            printf("Erro ao iniciar Winsock! Código: %d \n", resultado);
             return 1;
         }
-     printf ("Winsock iniciado! \n");
+    printf("Winsock iniciado! \n");
 
-     SOCKET tecnico = socket (AF_INET, SOCK_STREAM, IPPROTO_TCP);
-     
-        
+    SOCKET tecnico = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
+        if (tecnico  == INVALID_SOCKET){
+            printf("Erro ao criar Socket! Código: %d\n ",WSAGetLastError());
+            WSACleanup();
+            return 1;
+        }
+   
+    struct sockaddr_in destino;
+        destino.sin_family = AF_INET;
+        destino.sin_addr.s_addr = inet_addr("127.0.0.1");
+        destino.sin_port = htons(5000);
+    
 
+    int solicitaConexao = connect(tecnico, (struct sockaddr*)&destino, sizeof(destino));
+        if (solicitaConexao == SOCKET_ERROR){
+            printf ("Solicitação não efetuada! Código: %d \n", WSAGetLastError());
+            closesocket(tecnico);
+            WSACleanup();
+            return 1;  // (Erro 10061 = não tem servidor escutando nessa porta.)
+        }
+        printf ("Conexão realizada com sucesso! \n");
 
+    char buffer [1024];
+    // Cria um vetor de char de 1024 posições (buffer): onde a mensagem do servidor vai ficar guardada.
 
-
-
-
-
-
+    int bytes = recv(tecnico, buffer, sizeof(buffer) - 1, 0);
+    // Ele espera o servidor repassar a mensagem do cliente.
+          if (bytes > 0){
+            buffer[bytes]='\0'; // '\0' marca o fim do texto, e '-1' em 'recv' garante espaço para ele
+            printf ("Mensagem do cliente: %s \n", buffer);
+        } else if (bytes == 0) {
+            printf ("Servidor fechou! \n");
+        } else {
+            printf ("Deu erro! %d \n", WSAGetLastError());
+        }
+    
+    closesocket(tecnico);
+    WSACleanup();
+    return 0;
 }

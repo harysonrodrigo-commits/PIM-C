@@ -9,7 +9,7 @@ int main() {
     int resultado = WSAStartup(MAKEWORD(2, 2), &wsaData);
 
         if (resultado != 0) {
-            printf("Erro ao iniciar Winsock! %d \n", resultado);
+            printf("Erro ao iniciar Winsock! Código: %d \n", resultado);
             return 1;
         }
     printf("Winsock iniciado! \n");
