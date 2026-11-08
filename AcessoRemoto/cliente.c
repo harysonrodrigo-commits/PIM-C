@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <winsock2.h>
+#include <stdlib.h>
+#include <time.h>
 
 int main() {
         SetConsoleOutputCP(CP_UTF8);
+        srand (time(NULL));
     WSADATA wsaData;
    
     int resultado = WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -35,14 +38,56 @@ int main() {
             WSACleanup();
             return 1;  // (Erro 10061 = não tem servidor escutando nessa porta.)
         }
-        printf ("Conexão realizada com sucesso! \n");
+    printf ("Conexão realizada com sucesso! \n");
 
+    int token = (rand() * 32768 + rand ()) % 900000 + 100000;
+    printf ("Seu token: %d \n", token);
+
+    char tokenApresentar [64];
+    snprintf(tokenApresentar, sizeof(tokenApresentar), "CLIENTE:%d",token);
+    
+    int envioToken = send(cliente, tokenApresentar, strlen(tokenApresentar), 0);
+        
+        if (envioToken == SOCKET_ERROR){
+                printf ("Token não enviado! Código: %d \n", WSAGetLastError());
+                closesocket(cliente);
+                WSACleanup();
+                return 1;
+        }
+    printf ("Token enviado com sucesso! \n");
+
+    char resposta [64];
+    int bytes = recv(cliente, resposta, sizeof(resposta) - 1, 0);
+
+        if (bytes == SOCKET_ERROR){
+            printf ("Resposta não recebida! Código: %d \n", WSAGetLastError());
+            closesocket(cliente);
+             WSACleanup();
+            return 1;
+        } else if (bytes==0) {
+            printf ("Servidor sem conexão! \n");  
+            closesocket(cliente);
+            WSACleanup();
+            return 1;
+        }else{
+            printf("Resposta do servidor recebida com sucesso! \n");
+            resposta[bytes] = '\0';
+                if (strcmp(resposta, "OK") == 0){
+                    printf("Acesso liberado! \n");
+                } else {
+                    printf("Acesso negado! \n");
+                    closesocket(cliente);
+                    WSACleanup();
+                    return 1;
+                }
+        }
+            
     char mensagem [] = "Olá servidor!";
     // Cria um vetor de char com o texto "Ola servidor" (mensagem).
     // É o conteúdo que vai ser enviado.
     for (int i = 1; i <= 5; i++){
         char mensagem [64];
-        sprintf(mensagem, " Mensagem: %d", i);
+        sprintf(mensagem, " Mensagem: %d\n", i);
     
         int bytesEnviados = send(cliente, mensagem, strlen(mensagem), 0);
         // Envia os bytes pela conexão; strlen informa quantos bytes mandar.
