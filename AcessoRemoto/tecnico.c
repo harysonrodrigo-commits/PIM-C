@@ -36,6 +36,37 @@ int main() {
         }
         printf ("Conexão realizada com sucesso! \n");
 
+    int token;
+    char input [32];
+
+    printf("Dígite o token do cliente: \n");
+
+        if(fgets(input, sizeof(input), stdin) == NULL){
+            printf("Erro na leitura! \n");
+            closesocket(tecnico);
+            WSACleanup();
+            return 1;
+        }
+
+    input [strcspn(input, "\n")] = '\0';
+
+        if (sscanf(input, "%d", &token) != 1){
+            printf("Erro! Digite números. \n");
+            closesocket(tecnico);
+            WSACleanup();
+            return 1;
+        }
+    
+        if ((token < 100000) || (token > 999999)){
+            printf("Inválido! \n");
+            closesocket(tecnico);
+            WSACleanup();
+            return 1;
+        }
+    
+    char tokenApresentar [64];
+    snprintf(tokenApresentar, sizeof(tokenApresentar), "TECNICO:%d",token);
+
     char buffer [1024];
     // Cria um vetor de char de 1024 posições (buffer): onde a mensagem do servidor vai ficar guardada.
     int bytes;
