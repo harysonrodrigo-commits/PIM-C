@@ -67,6 +67,40 @@ int main() {
     char tokenApresentar [64];
     snprintf(tokenApresentar, sizeof(tokenApresentar), "TECNICO:%d",token);
 
+    int envioToken = send(tecnico, tokenApresentar, strlen(tokenApresentar), 0);
+        if (envioToken == SOCKET_ERROR){
+                printf ("Token não verificado! Código: %d \n", WSAGetLastError());
+                closesocket(tecnico);
+                WSACleanup();
+                return 1;
+        }
+
+    char resposta [64];
+    int bytesResposta = recv(tecnico, resposta, sizeof(resposta) - 1, 0);
+
+        if (bytesResposta == SOCKET_ERROR){
+            printf ("Resposta não recebida! Código: %d \n", WSAGetLastError());
+            closesocket(tecnico);
+             WSACleanup();
+            return 1;
+        } else if (bytesResposta==0) {
+            printf ("Servidor sem conexão! \n");  
+            closesocket(tecnico);
+            WSACleanup();
+            return 1;
+        }else{
+            printf("Resposta do servidor recebida com sucesso! \n");
+            resposta[bytesResposta] = '\0';
+                if (strcmp(resposta, "OK") == 0){
+                    printf("Acesso liberado! \n");
+                } else {
+                    printf("Acesso negado! \n");
+                    closesocket(tecnico);
+                    WSACleanup();
+                    return 1;
+                }
+        }
+
     char buffer [1024];
     // Cria um vetor de char de 1024 posições (buffer): onde a mensagem do servidor vai ficar guardada.
     int bytes;
