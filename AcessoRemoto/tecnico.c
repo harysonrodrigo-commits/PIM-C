@@ -100,6 +100,7 @@ int main() {
                     return 1;
                 }
         }
+    
 
     char buffer [1024];
     // Cria um vetor de char de 1024 posições (buffer): onde a mensagem do servidor vai ficar guardada.

@@ -55,51 +55,85 @@ int main() {
 
     printf ("Aguardando conexão do cliente! \n"); // esperando alguém conectar
 
-    SOCKET socketCliente = accept (servidor, NULL, NULL); 
+    SOCKET conexaoA = accept (servidor, NULL, NULL); 
     //SOCKET para cliente, com função accept, para atender e devolver um novo socket para o cliente  
    
-        if (socketCliente == INVALID_SOCKET){
-            printf ("Conexão deu erro! Código: %d \n", WSAGetLastError());
+        if (conexaoA == INVALID_SOCKET){
+            printf ("Primeira conexão deu erro! Código: %d \n", WSAGetLastError());
             closesocket(servidor);
             WSACleanup(); //Se INVALID_SOCKET então, deu erro
             return 1;
         }
-    printf ("Cliente conectado! \n"); //ligação foi atendida
+    printf ("Primeira conexão aceita com sucesso! \n"); //ligação foi atendida
 
-    printf ("Aguardando o técnico! \n");
+    printf ("Aguardando segunda conexão! \n");
 
-    SOCKET socketTecnico = accept(servidor, NULL, NULL);
-        if (socketTecnico == INVALID_SOCKET){
-            printf ("Conexão deu erro! Código: %d \n", WSAGetLastError());
-            closesocket(socketCliente);
+    SOCKET conexaoB = accept(servidor, NULL, NULL);
+        if (conexaoB == INVALID_SOCKET){
+            printf ("Segunda conexão deu erro! Código: %d \n", WSAGetLastError());
+            closesocket(conexaoA);
             closesocket(servidor);
             WSACleanup(); //Se INVALID_SOCKET então, deu erro
             return 1;
         }
-            printf("Técnico conectado! \n");
+            printf("Segunda conexão aceita com sucesso! \n");
 
+    char bufferA[64];
+    char bufferB[64];
+         
+    int bytesA = recv(conexaoA, bufferA, sizeof(bufferA) - 1, 0);
+        if (bytesA == SOCKET_ERROR) {
+            printf ("Dados não recebidos! CÓDIGO: %d \n", WSAGetLastError());
+            closesocket(conexaoA);
+            closesocket(conexaoB);
+            closesocket(servidor);
+            WSACleanup();
+            return 1;
+        } else if (bytesA == 0){
+            printf ("Deu erro no recv! %d \n", WSAGetLastError());
+        } else {
+            bufferA[bytesA] = '\0';
+            printf("Dados da primeira conexão recebida com sucesso %s\n", bufferA);
+        }
+
+    int bytesB = recv(conexaoB, bufferB, sizeof(bufferA) - 1, 0);
+        if (bytesB == SOCKET_ERROR) {
+            printf ("Dados não recebidos! CÓDIGO: %d \n", WSAGetLastError());
+            closesocket(conexaoA);
+            closesocket(conexaoB);
+            closesocket(servidor);
+            WSACleanup();
+            return 1;
+        } else if (bytesA == 0){
+            printf ("Deu erro no recv! %d \n", WSAGetLastError());
+        } else {
+            bufferA[bytesA] = '\0';
+            printf("Dados da segunda conexão recebida com sucesso %s\n", bufferB);
+        }
     char buffer [1024]; // Onde os bytes recebidos vão ser guardados.7
     int bytes;
   
-    while ((bytes = recv(socketCliente, buffer, sizeof(buffer) - 1, 0)) > 0) {
+    /*while ((bytes = recv(conexaoA, buffer, sizeof(buffer) - 1, 0)) > 0) {
             buffer[bytes] = '\0';
             printf("Repassando: %s \n", buffer);
 
-            int enviado = send(socketTecnico, buffer, bytes, 0);
+            int enviado = send(conexaoB, buffer, bytes, 0);
         if (enviado == SOCKET_ERROR) {
             printf("Mensagem não repassada! Código: %d \n", WSAGetLastError());
             break;   // sai do laço
         }
     }
-       
+    */
         if (bytes == 0) {
             printf ("Cliente desconectou! \n");
-        } else {
+        } else if (bytes < 0){
             printf ("Deu erro no recv! %d \n", WSAGetLastError());
+        } else {
+            printf ("Erro! \n ");
         }
 
-    closesocket(socketTecnico); // Fecha o socket do Tecnico
-    closesocket(socketCliente); // Fecha o socket do cliente 
+    closesocket(conexaoA); // Fecha o socket do Tecnico
+    closesocket(conexaoB); // Fecha o socket do cliente 
     closesocket(servidor); //fecha socket do servidor
     WSACleanup(); // Encerra a biblioteca e libera os recursos Winsock alocados
         return 0;
